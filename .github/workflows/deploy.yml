@@ -3,7 +3,7 @@ name: Deploy NEXUS to GitHub Pages
 on:
   # التشغيل عند أي تحديث على الفرع الرئيسي
   push:
-    branches: ["main"]
+    branches: ["master"]
 
   # السماح بتشغيل النشر يدوياً من تبويب Actions
   workflow_dispatch:
