@@ -2,8 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["three"],
-  // Disable static export to avoid SSR issues with client components
-  output: undefined,
+  output: 'export', // هذا السطر هو السر لتحويل الموقع لملفات ثابتة
+  images: {
+    unoptimized: true, // ضروري لأن GitHub Pages لا يدعم معالجة الصور
+  },
 };
 
 module.exports = nextConfig;
