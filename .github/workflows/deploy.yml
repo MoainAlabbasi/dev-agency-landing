@@ -1,0 +1,65 @@
+name: Deploy NEXUS to GitHub Pages
+
+on:
+  # التشغيل عند أي تحديث على الفرع الرئيسي
+  push:
+    branches: ["main"]
+
+  # السماح بتشغيل النشر يدوياً من تبويب Actions
+  workflow_dispatch:
+
+# صلاحيات ضرورية لـ GITHUB_TOKEN للنشر
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# منع تضارب عمليات النشر المتزامنة
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # مرحلة البناء (Build)
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # إعداد pnpm (لأنه المستخدم في مشروعك)
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      # إعداد Node.js (النسخة 20 مناسبة جداً لـ Next.js 14)
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build with Next.js
+        run: pnpm build
+
+      # رفع الملفات الناتجة (مجلد out) لتكون جاهزة للنشر
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  # مرحلة النشر (Deploy)
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
