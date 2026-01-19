@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 
 // Disable static generation
-export const dynamic_config = 'force-dynamic';
+//export const dynamic_config = 'force-dynamic';
 import { Navigation } from "@/components/Navigation";
 import { 
   AnimatedText, 
