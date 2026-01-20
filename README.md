@@ -167,4 +167,4 @@ MIT License - feel free to use for personal or commercial projects.
 
 ---
 
-Built with 💜 by NEXUS Agency
+Built with 💜 by Moain Alabbasi
